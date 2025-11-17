@@ -1,36 +1,35 @@
-# Rsbuild project
+# 像聊天一样跨组建通信 - 初稿
 
-## Setup
+- 提供一个自己的名字，和回调方法，`hooks` 会返回一个 `emit`
+- 用 `emit` 可以像指定名称发送特定消息，在任意地方也可以提供当前事件名，接收消息
+- 无论是否是父子层级都能相互通信，不会引发不必要的 `rerender`
 
-Install the dependencies:
+如下所示：
 
-```bash
-pnpm install
+```typescript
+const PubMox: FC = () => {
+  const [emit] = useEventChat("pub-mox", {
+    callback: (detail) => console.log("a----pub-mox", detail),
+  });
+
+  return (
+    <button type="button" onClick={() => emit({ name: "sub-mox" })}>
+      click it
+    </button>
+  );
+};
 ```
 
-## Get started
+```typescript
+const SubMox: FC = () => {
+  const [emit] = useEventChat("sub-mox", {
+    callback: (detail) => console.log("a----sub-mox", detail),
+  });
 
-Start the dev server, and the app will be available at [http://localhost:3000](http://localhost:3000).
-
-```bash
-pnpm dev
+  return (
+    <button type="button" onClick={() => emit({ name: "pub-mox" })}>
+      click it
+    </button>
+  );
+};
 ```
-
-Build the app for production:
-
-```bash
-pnpm build
-```
-
-Preview the production build locally:
-
-```bash
-pnpm preview
-```
-
-## Learn more
-
-To learn more about Rsbuild, check out the following resources:
-
-- [Rsbuild documentation](https://rsbuild.rs) - explore Rsbuild features and APIs.
-- [Rsbuild GitHub repository](https://github.com/web-infra-dev/rsbuild) - your feedback and contributions are welcome!
