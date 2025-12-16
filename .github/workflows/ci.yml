@@ -44,13 +44,6 @@ jobs:
           pnpm install --frozen-lockfile # 严格按pnpm-lock.yaml安装，禁用版本更新
           pnpm list # 可选：打印依赖列表，方便调试
 
-      # 5. ESLint代码质量检查（执行根目录lint，或指定子包）
-      - name: Run ESLint check
-        # 方式1：执行根目录统一的lint脚本（推荐，需根package.json配置）
-        run: pnpm run lint
-        # 方式2：仅校验指定子包（如@event-chat/core）
-        # run: pnpm --filter @event-chat/core lint
-
       # 6. Prettier格式校验（同理，支持根目录/指定子包）
       - name: Run Prettier check
         run: pnpm run format:check
@@ -70,6 +63,13 @@ jobs:
         # run: pnpm --filter @event-chat/core build
         # 方式2：构建所有子包（根package.json配置"build": "pnpm -r build"）
         run: pnpm run build
+
+      # 5. ESLint代码质量检查（执行根目录lint，或指定子包）
+      - name: Run ESLint check
+        # 方式1：执行根目录统一的lint脚本（推荐，需根package.json配置）
+        run: pnpm run lint
+        # 方式2：仅校验指定子包（如@event-chat/core）
+        # run: pnpm --filter @event-chat/core lint
 
       # 9. 上传构建产物（适配monorepo子包的dist路径）
       - name: Upload build artifacts
