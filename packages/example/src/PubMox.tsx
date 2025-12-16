@@ -1,7 +1,6 @@
-import { Button, useTest } from '@event-chat/core';
+import { useEventChat } from '@event-chat/core';
 import type { FC } from 'react';
 import { z } from 'zod';
-import { useEventChat } from './hooks';
 
 const Player = z.object({
   username: z.string(),
@@ -16,12 +15,14 @@ const PubMox: FC = () => {
       console.log('a----pub-mox', detail, Player.parse({ username: 'billie', xp: 100 })),
   });
 
-  useTest();
-
   return (
     <span>
-      <Button label="test" />
-      <button type="button" onClick={() => emit({ name: 'sub-mox' })}>
+      <button
+        type="button"
+        onClick={() => {
+          emit({ name: 'sub-mox' });
+        }}
+      >
         click it
       </button>
     </span>

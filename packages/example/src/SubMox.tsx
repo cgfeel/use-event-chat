@@ -1,5 +1,5 @@
+import { useEventChat } from '@event-chat/core';
 import type { FC } from 'react';
-import { useEventChat } from './hooks';
 
 const SubMox: FC = () => {
   const [emit] = useEventChat('sub-mox', {
@@ -8,7 +8,12 @@ const SubMox: FC = () => {
   });
 
   return (
-    <button type="button" onClick={() => emit({ name: 'pub-mox' })}>
+    <button
+      type="button"
+      onClick={() => {
+        emit({ name: 'pub-mox' });
+      }}
+    >
       click it
     </button>
   );
