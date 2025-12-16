@@ -41,7 +41,7 @@ jobs:
       # 4. 安装monorepo所有依赖（pnpm ci替代npm ci，更适配monorepo）
       - name: Install dependencies
         run: |
-          pnpm ci # 严格按pnpm-lock.yaml安装，禁用版本更新
+          pnpm install --frozen-lockfile # 严格按pnpm-lock.yaml安装，禁用版本更新
           pnpm list # 可选：打印依赖列表，方便调试
 
       # 5. ESLint代码质量检查（执行根目录lint，或指定子包）
