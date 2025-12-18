@@ -126,6 +126,24 @@ const { emit } = useEventChat('sub-mox');
 emit({ name: 'pub-mox', token });
 ```
 
+### 调试
+
+和 `callback` 一样，提供一个 `debug` 回调函数，将收集所有通过 `emit` 发送的，同名且未能触发事件的消息，例如：
+
+```typescript
+useEventChat('pub-mox', {
+  group: 'form-detail-edit',
+  callback: (record) => console.log('a----pub-mox', record),
+  debug: (item, result) => console.log('a----pub-log', item, result),
+});
+```
+
+参数 `item` 为发送的消息，类型 `unknown`，参数 `result` 的类型为：`ResultType | undefined`，来自 `safeParse` 得到的结果：
+
+```typescript
+type ResultType = z.ZodSafeParseResult<unknown>;
+```
+
 ## 写在最后
 
 ### 实现原理
