@@ -60,7 +60,6 @@ export function useEventChat<Schema extends ZodType, Name extends string>(
       const opitem = options.current;
 
       if (!opitem || !isSafetyType(subName, name)) return;
-
       if (hasSchema(opitem)) {
         validate({ ...data, name: subName }, { ...opitem, token: tokenRc.current })
           .then(opitem.callback)
@@ -77,7 +76,7 @@ export function useEventChat<Schema extends ZodType, Name extends string>(
   );
 
   const emit = useCallback(
-    <Detail, CustomName extends string = string>(
+    <Detail, CustomName extends string>(
       detail: Omit<EventDetailType<Detail, CustomName>, '__origin' | 'group' | 'id' | 'type'>
     ) => {
       // 业务提交 name 是空的，那么 __origin 就是空，当做匿名处理

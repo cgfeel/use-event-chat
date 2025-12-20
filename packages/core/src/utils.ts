@@ -11,7 +11,8 @@ export const createEvent = <Detail, Name extends string = string>(
     detail,
   });
 
-export const createToken = (key: string) => window.btoa(`${key}:${Math.random()}:${Date.now()}`);
+export const createToken = (key: string): string =>
+  window.btoa(`${key}:${Math.random()}:${Date.now()}`);
 
 export const getConditionKey = (name: string, id: string, type?: string) =>
   [name, id, type].filter(Boolean).join('-');

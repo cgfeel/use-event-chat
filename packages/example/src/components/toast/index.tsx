@@ -1,0 +1,65 @@
+import { createToken, useEventChat } from '@event-chat/core';
+import { type FC, type PropsWithChildren, memo, useCallback, useState } from 'react';
+import z from 'zod';
+import { toastClose, toastOpen, toastOpenResult } from '@/utils/event';
+import ToastItem from './ToastItem';
+import { toastItem } from './utils';
+
+const Toast: FC<PropsWithChildren> = ({ children }) => {
+  const [toasts, setToasts] = useState<ToastItemType[]>([]);
+  const close = useCallback(
+    (id: string) =>
+      setToasts((current) => {
+        const update = current.filter((item) => item.id !== id);
+        return update.length === current.length ? current : update;
+      }),
+    []
+  );
+
+  const { emit } = useEventChat(toastOpen, {
+    schema: toastItem.omit({ id: true }).partial().required({ title: true }).extend({
+      keyname: z.string().optional(),
+    }),
+    callback: ({ detail }) => {
+      const { keyname, duration = 3000, type = 'info', ...args } = detail;
+      const id = createToken('toast');
+
+      setToasts((current) => current.concat({ ...args, duration, id, type }));
+      if (duration > 0) {
+        setTimeout(() => {
+          close(id);
+        }, duration);
+      }
+      emit({
+        detail: { id, keyname },
+        name: toastOpenResult,
+      });
+    },
+  });
+
+  useEventChat(toastClose, {
+    schema: z.object({
+      id: z.string(),
+    }),
+    callback: ({ detail }) => close(detail.id),
+  });
+
+  return (
+    <>
+      {children}
+      <div className="fixed top-4 right-4 z-50 flex flex-col gap-3 pointer-events-none">
+        {toasts.map((toast) => (
+          <div key={toast.id} className="pointer-events-auto">
+            <ToastItem item={toast} />
+          </div>
+        ))}
+      </div>
+    </>
+  );
+};
+
+export default memo(Toast, () => true);
+
+export interface ToastItemType extends z.infer<typeof toastItem> {}
+
+export type ToastType = 'success' | 'error' | 'warning' | 'info';

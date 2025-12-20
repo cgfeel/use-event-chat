@@ -10,7 +10,7 @@ const PubSchema: FC = () => {
   const [list, setList] = useState<ChatItemProps[]>([]);
   const rollRef = useRef<HTMLDivElement>(null);
 
-  const { emit } = useEventChat('pub-no-limit', {
+  const { emit } = useEventChat('pub-zod-schema', {
     schema: z.object({
       title: z.string(),
       description: z.string().optional(),

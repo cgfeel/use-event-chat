@@ -25,10 +25,9 @@ export default defineConfig({
     },
     sourceMap: true,
   },
-  // resolve: {
-  //   alias: { '@/': './src' },
-  //   extensions: ['.ts', '.tsx', '.js', '.jsx'],
-  // },
+  resolve: {
+    alias: { '@/': './src' },
+  },
   source: {
     entry: {
       index: './src/index.tsx', // 你的库主入口文件
