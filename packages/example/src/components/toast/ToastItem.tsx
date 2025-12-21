@@ -84,19 +84,19 @@ const ToastItem: FC<ToastItemProps> = ({ item: { id, message, title, type } }) =
 
   return (
     <div
-      className={`inline-flex items-start gap-2 px-4 py-3 rounded-lg shadow-lg text-left text-white max-w-sm cursor-pointer transition-all duration-300 ${config.bg}`}
+      className={`toast-base ${config.bg}`}
       ref={toastRef}
       role="alert"
       onClick={handleToastClick}
     >
-      <div className="pt-0.5 text-xl text-center">
+      <div className="toast-icon">
         <FontAwesomeIcon icon={config.icon} />
       </div>
-      <div className="flex-1 text-sm font-medium wrap-break-word break-all">
+      <div className="toast-content">
         <div className="font-bold">{title}</div>
         {message && <div className="text-opacity-90 text-xs mt-1">{message}</div>}
       </div>
-      <span className="text-sm hover:opacity-80 transition-opacity" onClick={handleClose}>
+      <span className="toast-close" onClick={handleClose}>
         <FontAwesomeIcon icon={faTimes} />
       </span>
     </div>
