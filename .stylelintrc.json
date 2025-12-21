@@ -9,6 +9,7 @@
         "message": "类名必须为 kebab-case 格式（允许双连字符 --，如 .demo-button--primary）"
       }
     ],
+    "import-notation": null,
     "at-rule-no-unknown": [
       true,
       {
