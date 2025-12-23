@@ -1,8 +1,6 @@
-// toast
-export const toastClose = 'toast-close';
-export const toastItem = 'toast-item';
-export const toastOpen = 'toast-open';
-export const toastOpenResult = 'toast-open-result';
+// pub-group-items
+export const groupName = 'group-items';
+export const subGroupItems = 'sub-group-items';
 
 // pub-sub-no-limit
 export const pubNoLimit = 'pub-no-limit';
@@ -13,3 +11,9 @@ export const pubZodAllow = 'pub-zod-allow';
 export const pubZodSchema = 'pub-zod-schema';
 export const subZodSchema = 'sub-zod-schema';
 export const subZodSchemaResult = 'sub-zod-schema-result';
+
+// toast
+export const toastClose = 'toast-close';
+export const toastItem = 'toast-item';
+export const toastOpen = 'toast-open';
+export const toastOpenResult = 'toast-open-result';

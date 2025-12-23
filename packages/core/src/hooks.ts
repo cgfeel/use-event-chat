@@ -16,7 +16,7 @@ import {
   isSafetyType,
   mountEvent,
 } from './utils';
-import { validate } from './validate';
+import { checkLiteral, validate } from './validate';
 
 export const useMemoFn = <T>(fn: T) => {
   const methodRef = useRef<T>(fn);
@@ -54,27 +54,33 @@ export function useEventChat<Schema extends ZodType, Name extends string>(
   const options = useMemoFn(ops);
   const tokenRc = useMemoFn(allowToken ? token : undefined);
 
+  const errorHandle = useCallback(
+    (error: unknown, data: unknown) => {
+      if (error instanceof Error && options.current?.debug)
+        options.current.debug(isResultType(error.cause) ? { ...error.cause, data } : undefined);
+    },
+    [options]
+  );
+
   const callbackHandle = useCallback(
     (data: EventDetailType) => {
       const { name: subName, ...args } = data;
       const opitem = options.current;
 
       if (!opitem || !isSafetyType(subName, name)) return;
-      if (hasSchema(opitem)) {
-        validate({ ...data, name: subName }, { ...opitem, token: tokenRc.current })
-          .then(opitem.callback)
-          .catch((error) => {
-            if (error instanceof Error && opitem.debug)
-              opitem.debug(
-                isResultType(error.cause) ? { ...error.cause, data: data.detail } : undefined
-              );
-          });
-        return;
-      }
+      const upRecord = { ...args, name: subName };
 
-      opitem.callback?.({ ...args, name: subName });
+      if (hasSchema(opitem)) {
+        validate(upRecord, { ...opitem, token: tokenRc.current })
+          .then(opitem.callback)
+          .catch((error) => errorHandle(error, data.detail));
+      } else {
+        checkLiteral(upRecord, { ...opitem, token: tokenRc.current })
+          .then(() => opitem.callback?.(upRecord))
+          .catch((error) => errorHandle(error, data.detail));
+      }
     },
-    [name, options, tokenRc]
+    [name, options, tokenRc, errorHandle]
   );
 
   const emit = useCallback(

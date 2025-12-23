@@ -13,4 +13,5 @@ export interface ChatItemProps {
   time: Date;
   type: keyof typeof chatMap;
   footer?: ReactNode;
+  header?: ReactNode;
 }

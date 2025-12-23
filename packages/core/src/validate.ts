@@ -1,21 +1,6 @@
 import { ZodType, z } from 'zod';
 import { EventDetailType, MountOpsType } from './utils';
 
-const checkLiteral = <Detail, Name extends string = string, Schema extends ZodType = ZodType>(
-  data: EventDetailType<Detail, Name>,
-  { group, token }: MountOpsType<Name, Schema>
-) => {
-  const schema = z.object({
-    group: group && !data.global ? z.literal(group) : z.undefined(),
-    token: token ? z.literal(token) : z.undefined(),
-  });
-
-  const cause = schema.safeParse(data);
-  return cause.success
-    ? Promise.resolve(cause)
-    : Promise.reject(new Error('validate faild', { cause }));
-};
-
 const checkDetail = <Name extends string = string, Schema extends ZodType = ZodType>(
   detail: unknown,
   { async, schema: schemaRaw }: MountOpsType<Name, Schema>
@@ -25,6 +10,24 @@ const checkDetail = <Name extends string = string, Schema extends ZodType = ZodT
   return result.then((cause) =>
     cause.success ? cause : Promise.reject(new Error('validate faild', { cause }))
   );
+};
+
+export const checkLiteral = <Detail, Name extends string = string>(
+  data: EventDetailType<Detail, Name>,
+  { group, token }: Pick<EventDetailType, 'group' | 'token'>
+) => {
+  const schema = z.object({
+    group:
+      (group ? z.literal(group) : undefined) ??
+      (!group && (!data.global || !data.group) ? z.undefined() : undefined) ??
+      z.any(),
+    token: token ? z.literal(token) : z.undefined(),
+  });
+
+  const cause = schema.safeParse(data);
+  return cause.success
+    ? Promise.resolve(cause)
+    : Promise.reject(new Error('validate faild', { cause }));
 };
 
 export const validate = <Detail, Name extends string = string, Schema extends ZodType = ZodType>(

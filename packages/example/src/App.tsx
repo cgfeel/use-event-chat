@@ -3,7 +3,7 @@ import ExtraGuid from './components/ExtraGuid';
 import Layout from './components/Layout';
 import ChatLayout from './components/chat/ChatLayout';
 import Toast from './components/toast';
-import PubGroup from './module/PubGroup';
+import PubGroupPanel from './module/PubGroupPanel';
 import PubNoLimit from './module/PubNoLimit';
 import PubSchema from './module/PubSchema';
 import PubSchemaExtra from './module/PubSchemaExtra';
@@ -55,7 +55,7 @@ const App = () => {
             key="pub"
             title="pub-group-items"
           >
-            <PubGroup />
+            <PubGroupPanel />
           </ChatLayout>,
           <ChatLayout key="sub" title="sub-group-items">
             <SubGroup />
