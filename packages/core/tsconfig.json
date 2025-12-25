@@ -17,5 +17,5 @@
     "rootDir": "./src" // 源码根目录
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/*.stories.tsx"]
+  "exclude": ["node_modules", "dist", "**/*.stories.tsx", "test-d"]
 }
